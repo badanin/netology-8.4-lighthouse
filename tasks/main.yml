@@ -1,0 +1,18 @@
+---
+# tasks file for lighthouse
+- name: Install nginx
+  ansible.builtin.apt:
+    pkg:
+      - nginx
+      - git
+    update_cache: yes
+- name: Remove file (delete file)
+  ansible.builtin.file:
+    path: /var/www/html/index.nginx-debian.html
+    state: absent
+- name: Clone lighthouse
+  become: true
+  ansible.builtin.git: 
+    repo: '{{ lighthouse_git }}'
+    dest: '{{ lighthouse_nginx }}'
+  notify: Restart nginx
